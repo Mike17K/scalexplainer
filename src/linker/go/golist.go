@@ -1,4 +1,4 @@
-package typescript
+package linker
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 )
 
 func RunGoList(path string) error {
-	cmd := exec.Command("go", "list", "-json", filepath.Join(path, "..."), "|", "jq", ".", ">", "go-deps.json")
+	cmd := exec.Command("go", "list", "-json", filepath.Join(path, "..."), "|", "jq . > go-deps.json")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()

@@ -1,4 +1,4 @@
-package typescript
+package linker
 
 import (
 	"fmt"
