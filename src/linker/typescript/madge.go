@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/Mike17K/scalexplainer/src/utils"
 )
 
 func checkAndInstallMadge() error {
@@ -25,12 +27,18 @@ func checkAndInstallMadge() error {
 }
 
 func RunMadge(path string) error {
-	err := checkAndInstallMadge()
+	finalPath, err := utils.GetPath(path)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Root: ", finalPath)
+
+	err = checkAndInstallMadge()
 	if err != nil {
 		fmt.Println("Error installing madge")
 		return err
 	}
-	cmd := exec.Command("npx", "madge", "--json", path)
+	cmd := exec.Command("npx", "madge", "--json", finalPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()

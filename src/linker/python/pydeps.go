@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/Mike17K/scalexplainer/src/utils"
 )
 
 func checkAndInstallPydeps() error {
@@ -25,12 +27,18 @@ func checkAndInstallPydeps() error {
 }
 
 func RunPydeps(path string) error {
-	err := checkAndInstallPydeps()
+	finalPath, err := utils.GetPath(path)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Root: ", finalPath)
+
+	err = checkAndInstallPydeps()
 	if err != nil {
 		fmt.Println("Error installing pydeps")
 		return err
 	}
-	cmd := exec.Command("python", "-m", "pydeps", "--json", path)
+	cmd := exec.Command("python", "-m", "pydeps", "--json", finalPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
